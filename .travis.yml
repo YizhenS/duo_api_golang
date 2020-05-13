@@ -7,7 +7,13 @@ go:
     - "1.12"
     - "1.13"
 
+before_install:
+  - go get -t -v ./...
+
 script:
     - diff -u <(echo -n) <(gofmt -d .)
-    - go test -v -race ./...
+    - go test -race -coverprofile=coverage.txt -covermode=atomic
     - go build ./...
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
